@@ -87,7 +87,7 @@ public class MenuIHM {
 
         try(BufferedInputStream brs = new BufferedInputStream(new FileInputStream(file));
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(binaryFile))){
-            byte[] buffer = new byte[1024];add
+            byte[] buffer = new byte[1024];
             int nb;
             while ((nb = brs.read(buffer)) > 0 ){
                 bos.write(buffer, 0, nb);
