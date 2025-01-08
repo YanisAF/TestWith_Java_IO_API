@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class MenuIHM {
     private static final Scanner sc = new Scanner(System.in);
     private final static File file = new File("journal.txt");
+    private static final File binaryFile = new File("journal_backup.dat");
 
     public static void MenuStart(){
         while(true){
@@ -36,6 +37,7 @@ public class MenuIHM {
                     convertToBinaryFile();
                     break;
                 case 4:
+                    displayBinaryFile();
                     break;
                 case 5:
                     break;
@@ -65,7 +67,7 @@ public class MenuIHM {
                 String entry = timestamp + " - " + addAcitivity;
                 br.write(entry);
                 br.newLine();
-                System.out.println("Activité ajouté avec succès: "+addAcitivity);
+                System.out.println("Activité ajouté avec succès"+addAcitivity+"\n");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -74,8 +76,9 @@ public class MenuIHM {
     public static void displayActivities(){
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
+            System.out.println("--- Journal des activités ---");
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                System.out.println(line+"\n");
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -83,8 +86,6 @@ public class MenuIHM {
     }
 
     public static void convertToBinaryFile(){
-        File binaryFile = new File("journal_backup.dat");
-
         try(BufferedInputStream brs = new BufferedInputStream(new FileInputStream(file));
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(binaryFile))){
             byte[] buffer = new byte[1024];
@@ -92,6 +93,18 @@ public class MenuIHM {
             while ((nb = brs.read(buffer)) > 0 ){
                 bos.write(buffer, 0, nb);
                 bos.flush();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayBinaryFile(){
+        try(BufferedInputStream brs = new BufferedInputStream(new FileInputStream(binaryFile))){
+            byte[] buffer = new byte[1024];
+            int nb;
+            while ((nb = brs.read(buffer)) > 0 ){
+                System.out.println(new String(buffer, 0, nb));
             }
         }catch (IOException e){
             e.printStackTrace();
